@@ -1,113 +1,33 @@
-# ToDo
 
-## Overview
-This Flutter-based To-Do Application allows users to manage their tasks efficiently. It provides features such as adding, updating, deleting, and searching tasks. All tasks are stored locally using SQLite, ensuring persistence.
+Interview Questions and Answers 🎯
+1. What is this project about?
+Answer: "This project is a To-Do list application built using Flutter. It allows users to add, update, delete, and search tasks, store them in an SQLite database, and manage task completion states with a checkbox. It also supports time-based task reminders using a Time Picker feature."
 
-## Features
-- **Add New Task**: Users can add tasks with a title, time, and status.
-- **Mark as Complete**: Tasks can be marked as complete/incomplete.
-- **Search Functionality**: Users can search tasks based on the title.
-- **Persistent Storage**: SQLite database is used to store tasks.
-- **Time Picker**: Users can select a time for each task using a `TimePicker` widget.
-- **Responsive UI**: The app features a responsive and interactive user interface.
-- **Drawer Integration**: A navigation drawer is added for better usability.
+2. Why did you choose Flutter for this project?
+Answer: "I chose Flutter because it allows me to create a cross-platform application efficiently with a single codebase. Its widget-based architecture makes UI development fast and highly customizable. Additionally, Dart's asynchronous capabilities help manage database operations smoothly."
 
----
+3. How did you implement the database for storing tasks?
+Answer: "I used SQLite as the local database. I created a helper class DBHelper to handle operations such as inserting, querying, updating, and deleting tasks. I also integrated the sqflite package to interact with the database."
 
-## Project Setup
-Follow these steps to set up the project locally:
+4. How does the search functionality work?
+Answer: "The search functionality filters tasks in real time. I implemented a listener on the TextEditingController of the search bar, which dynamically filters tasks based on the input text. For efficient searching, the database query can also be used to fetch only matching records. Tasks for each user will rarely scale up to the level where database querying will add significant latency, so I loaded all the user tasks into the RAM and then implemented string matching for them. However if there is a need I have few alternatives with me:
+   --  Debouncing Input:Debouncing ensures the function is not called on every keystroke but only after a short delay (e.g., 300ms). This prevents unnecessary database queries.
+   --  Full-Text Search with SQLite:SQLite supports full-text search (FTS), which is optimized for searching text in large datasets. You can create a virtual table with FTS5 to speed up search queries."
 
-1. **Install Flutter**
-   - Ensure Flutter SDK is installed on your machine.
-   - Verify installation:
-     ```bash
-     flutter doctor
-     ```
-2. **Clone the Repository**
-   ```bash
-   git clone <repository-url>
-   cd <project-directory>
-   ```
-3. **Install Dependencies**
-   Run the following command to fetch the required packages:
-   ```bash
-   flutter pub get
-   ```
+6. How did you manage the UI layout for task display?
+Answer: "I used Flutter widgets like ListView, ListTile, and CircleAvatar to display tasks. Each task shows a title, time, and a checkbox. The UI is wrapped inside a container with padding and uses a responsive design for a clean look."
 
-4. **Run the App**
-   Start the app using:
-   ```bash
-   flutter run
-   ```
+7. What challenges did you face while working on this project?
+Answer: "One challenge was handling time formatting when working with TimeOfDay and SQLite. Since TimeOfDay is not directly storable in SQLite, I converted it into a string before saving and parsed it back while retrieving data. Another challenge was ensuring that the UI updates dynamically after every database operation."
 
----
+8. How did you ensure the app data persists after restarting?
+Answer: "I used SQLite to store tasks persistently. Even after the app restarts, the data is retrieved from the database and displayed using a query in the initState method of the main widget."
 
-## Code Structure
+9. How would you improve this app in the future?
+Answer: "In the future, I would add notifications for tasks using local notifications, integrate Firebase for cloud sync, allow users to categorize tasks into different lists, and implement dark mode for better user experience."
 
-### 1. **Database Management**
-The database operations are handled using the `DBHelper` class, which performs CRUD (Create, Read, Update, Delete) operations using SQLite.
+10. How does the Drawer (sidebar) work in this app?
+Answer: "I implemented the Drawer using Flutter's Drawer widget. It opens using a menu button on the AppBar. The Scaffold.of(context).openDrawer() method is used to trigger the drawer programmatically."
 
-#### `DBHelper` Class
-- `addToDO(ToDo todo)`: Adds a new task to the database.
-- `getAllToDos()`: Fetches all tasks stored in the database.
-- `updateToDo(ToDo todo)`: Updates an existing task.
-- `deleteToDo(int id)`: Deletes a task based on its ID.
-
-Example Usage:
-```dart
-DBHelper dbHelper = DBHelper.getInstance;
-await dbHelper.addToDO(todo: ToDo(id: '1', todoText: 'Task 1', startTime: TimeOfDay.now(), isDone: false));
-```
-
----
-
-### 2. **Model**
-The `ToDo` class serves as a model for representing tasks.
-
-#### `ToDo` Class:
-```dart
-class ToDo {
-  String id;
-  String? todoText;
-  TimeOfDay startTime;
-  bool isDone;
-
-  ToDo({required this.id, this.todoText, required this.startTime, this.isDone = false});
-}
-```
-
----
-
-## Future Improvements
-- **Notifications**: Integrate local notifications to remind users of tasks.
-- **Due Dates**: Add functionality to set and manage task due dates.
-- **Categories**: Allow tasks to be organized into categories.
-- **Dark Mode**: Add support for light and dark themes.
-- **Animations**: Include subtle animations for better user experience.
-- **Backup & Restore**: Enable cloud sync for tasks.
-
----
-
-
----
-
-## Dependencies
-- `sqflite`: SQLite database integration.
-- `path_provider`: To determine database path.
-- `flutter`: Core Flutter SDK.
-
-Add these to your `pubspec.yaml`:
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  sqflite: ^2.0.0+4
-  path_provider: ^2.0.11
-```
-
----
-
-## Conclusion
-This To-Do application demonstrates efficient task management using Flutter and SQLite. The project is modular, scalable, and provides a solid foundation for future improvements.
-
-Feel free to continue upgrading the app using the outlined **Future Improvements** section!
+11. How did you handle task completion in the app?
+Answer: "Each task has a boolean isDone attribute, which tracks its completion state. I used a checkbox (Icons.check_box or Icons.check_box_outline_blank) to update this value and marked completed tasks with a strikethrough using TextDecoration.lineThrough."
